@@ -26,13 +26,14 @@ function formatDate(timestamp) {
 function formatDay(timestamp) {
   let date = new Date(timestamp * 1000);
   let day = date.getDay();
-  let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  let days = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
 
   return days[day];
 }
 
 function displayForecast(response) {
   let forecast = response.data.list;
+  console.log(response.data.list);
 
   let forecastElement = document.querySelector("#forecast");
 
@@ -47,18 +48,17 @@ function displayForecast(response) {
       <div class="weather-forecast-date">
            ${formatDay(forecastDay.dt)}
             </div>
-              <img src="http://shecodes-assets.s3.amazonaws.com/api/weather/icons/${
+              <img src=""http://shecodes-assets.s3.amazonaws.com/api/weather/icons/${
                 forecastDay.weather[0].icon
-              }.png" 
-              alt="" 
+              }.png" alt="${forecastDay.weather[0].description}" 
               width="42"
                 />
                  <div class="weather-forecast-temperatures">
                    <span class="weather-forecast-temperature-max"> ${Math.round(
-                     forecastDay.temp.max
+                     forecastDay.main.temp_max
                    )}° </span>
                     <span class="weather-forecast-temperature-min"> ${Math.round(
-                      forecastDay.temp.min
+                      forecastDay.main.temp_min
                     )}° </span> 
                 </div>
             </div>
@@ -76,11 +76,11 @@ function getForecast(api, coordinates) {
 
   if (api === "shecodes") {
     apiKey = "obb0cabb84e68cc4930b1bfb662005f";
-    apiUrl = `https://api.shecodes.io/weather/v1/current?lat=${coordinates.lat}&lon=${coordinates.lon}&key=${apiKey}&units=metric`;
+    apiUrl = `https://api.shecodes.io/weather/v1/current?lat=${coordinates.lat}&lon=${coordinates.lon}&key=${apiKey}&units=imperial`;
   } else if (api === "openweathermap") {
     apiKey = "9cb72bec958f8fb02391985ed7b219d2";
   }
-  apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lon=${coordinates.lon}&lat=${coordinates.lat}&appid=9cb72bec958f8fb02391985ed7b219d2&units=metric`;
+  apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lon=${coordinates.lon}&lat=${coordinates.lat}&appid=9cb72bec958f8fb02391985ed7b219d2&units=imperial`;
   axios.get(apiUrl).then(displayForecast);
 }
 
@@ -113,7 +113,7 @@ function displayTemperature(response) {
 
 function search(city) {
   let apiKey = "obb0cabb84e68cc4930b1tbfb662005f";
-  let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=obb0cabb84e68cc4930b1tbfb662005f&units=metric`;
+  let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=obb0cabb84e68cc4930b1tbfb662005f&units=imperial`;
   axios.get(apiUrl).then(displayTemperature);
 }
 
@@ -150,6 +150,3 @@ search("New York");
 
 let form = document.querySelector("#search-form");
 form.addEventListener("submit", handleSubmit);
-
-let fahrenheitLink = document.querySelector("#fahrenheit-link");
-fahrenheitLink.addEventListener("click", displayFahrenheitTemperature);
