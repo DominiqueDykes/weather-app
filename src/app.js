@@ -32,8 +32,8 @@ function formatDay(timestamp) {
 }
 
 function displayForecast(response) {
-  let forecast = response.data.list;
-  console.log(response.data.list);
+  let forecast = response.data.daily;
+  console.log(response);
 
   let forecastElement = document.querySelector("#forecast");
 
@@ -48,17 +48,19 @@ function displayForecast(response) {
       <div class="weather-forecast-date">
            ${formatDay(forecastDay.dt)}
             </div>
-              <img src=""http://shecodes-assets.s3.amazonaws.com/api/weather/icons/${
+              <img src="http://openweathermap.org/img/wn/${
                 forecastDay.weather[0].icon
-              }.png" alt="${forecastDay.weather[0].description}" 
-              width="42"
+              }@2x.png"
+          alt=""
+          width="42"
+        />
                 />
                  <div class="weather-forecast-temperatures">
                    <span class="weather-forecast-temperature-max"> ${Math.round(
-                     forecastDay.main.temp_max
+                     forecastDay.main.temp.max
                    )}° </span>
                     <span class="weather-forecast-temperature-min"> ${Math.round(
-                      forecastDay.main.temp_min
+                      forecastDay.main.temp.min
                     )}° </span> 
                 </div>
             </div>
@@ -70,17 +72,10 @@ function displayForecast(response) {
   forecastElement.innerHTML = forecastHTML;
 }
 
-function getForecast(api, coordinates) {
-  console.log(coordinates);
-  let apiUrl, apiKey;
-
-  if (api === "shecodes") {
-    apiKey = "obb0cabb84e68cc4930b1bfb662005f";
-    apiUrl = `https://api.shecodes.io/weather/v1/current?lat=${coordinates.lat}&lon=${coordinates.lon}&key=${apiKey}&units=imperial`;
-  } else if (api === "openweathermap") {
-    apiKey = "9cb72bec958f8fb02391985ed7b219d2";
-  }
-  apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lon=${coordinates.lon}&lat=${coordinates.lat}&appid=9cb72bec958f8fb02391985ed7b219d2&units=imperial`;
+function getForecast(coordinates) {
+  let apiKey = "obb0cabb84e68cc4930b1tbfb662005f";
+  let apiUrl = `https://api.shecodes.io/weather/v1/forecast?lon=${coordinates.lon}&lat=${coordinates.lat}&key=obb0cabb84e68cc4930b1tbfb662005f&units=imperial`;
+  console.log(apiUrl);
   axios.get(apiUrl).then(displayForecast);
 }
 
@@ -107,8 +102,7 @@ function displayTemperature(response) {
   );
   iconElement.setAttribute("alt", response.data.condition.description);
 
-  const newCoords = { lat: 39.31, lon: -74.5 };
-  getForecast("openweathermap", newCoords);
+  getForecast(response.data.coordinates);
 }
 
 function search(city) {
