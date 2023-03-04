@@ -33,9 +33,8 @@ function formatDay(timestamp) {
 
 function displayForecast(response) {
   let forecast = response.data.daily;
-  console.log(response);
-
   let forecastElement = document.querySelector("#forecast");
+  console.log(response);
 
   let forecastHTML = `<div class="row">`;
   forecast.forEach(function (forecastDay, index) {
@@ -46,7 +45,7 @@ function displayForecast(response) {
 
     <div class="col-2">
       <div class="weather-forecast-date">
-           ${formatDay(forecastDay.dt)}
+           ${formatDay(forecastDay.time)}
             </div>
               <img src="http://openweathermap.org/img/wn/${
                 forecastDay.weather[0].icon
@@ -75,7 +74,6 @@ function displayForecast(response) {
 function getForecast(coordinates) {
   let apiKey = "obb0cabb84e68cc4930b1tbfb662005f";
   let apiUrl = `https://api.shecodes.io/weather/v1/forecast?lon=${coordinates.lon}&lat=${coordinates.lat}&key=obb0cabb84e68cc4930b1tbfb662005f&units=imperial`;
-  console.log(apiUrl);
   axios.get(apiUrl).then(displayForecast);
 }
 
